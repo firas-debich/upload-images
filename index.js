@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+require("dotenv").config();
 const path = require("path");
 const cors = require("cors");
 const multer = require("multer");
@@ -16,13 +17,16 @@ const main = () => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(cors());
+  // return hello world
+  app.get("/", (req, res) => {
+    res.send("Hello World");
+  });
   app.post("/upload", upload.single("file"), (req, res) => {
     const file = req.file.path;
     res.send(file);
   });
   app.post("/upload-multiple", upload.array("files"), (req, res) => {
-    const filesArray = req.files.map((e) => e.path);  
-
+    const filesArray = req.files.map((e) => e.path);
     res.json(filesArray);
   });
 
