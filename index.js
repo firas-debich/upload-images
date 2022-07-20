@@ -14,10 +14,11 @@ const storage = multer.diskStorage({
     cb(null, file.originalname);
   },
 });
-//
+// 
 const upload = multer({ storage: storage });
 const main = () => {
-  console.log(__dirname);
+  const __dirname1 = path.resolve();
+  
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(cors());
@@ -25,11 +26,13 @@ const main = () => {
     res.send("Hello World");
   });
   app.post("/upload", upload.single("file"), (req, res) => {
-    const file = path.join(__dirname, req.file.path);
+    app.use(express.static(path.join(__dirname1, "/uploads")));
+
+    const file =  path.resolve(__dirname1, req.file.path)
     res.send(file);
   });
   app.post("/upload-multiple", upload.array("files"), (req, res) => {
-    const filesArray = req.files.map((e) => path.join(__dirname, e.path));
+    const filesArray = req.files.map((e) => e.path);
     res.json(filesArray);
   });
   app.listen(process.env.PORT || 3333, (_) => console.log("Server is running"));
