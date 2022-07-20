@@ -3,9 +3,11 @@ const app = express();
 require("dotenv").config();
 const path = require("path");
 const cors = require("cors");
+const fs = require("fs");
 const multer = require("multer");
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
+    fs.mkdirSync("uploads", { recursive: true });
     cb(null, path.join(__dirname, "uploads"));
   },
   filename: (req, file, cb) => {
